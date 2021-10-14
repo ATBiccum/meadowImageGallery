@@ -4,7 +4,6 @@ using Meadow.Foundation;
 using Meadow.Foundation.Displays.TftSpi;
 using Meadow.Foundation.Graphics;
 using Meadow.Foundation.Leds;
-using Meadow.Foundation.Sensors.Buttons;
 using Meadow.Hardware;
 using SimpleJpegDecoder;
 using System;
@@ -15,15 +14,15 @@ namespace meadowImageGallery
 {
     public class MeadowApp : App<F7Micro, MeadowApp>
     {
-        RgbLed led;
         St7735 display;
         GraphicsLibrary graphics;
+        
 
         public MeadowApp()
         {
             var led = new RgbLed(Device, Device.Pins.OnboardLedRed, Device.Pins.OnboardLedGreen, Device.Pins.OnboardLedBlue);
             led.SetColor(RgbLed.Colors.Red);
-
+            
             var config = new SpiClockConfiguration(
                  speedKHz: 6000,
                  mode: SpiClockConfiguration.Mode.Mode3);
@@ -39,20 +38,19 @@ namespace meadowImageGallery
                 chipSelectPin: Device.Pins.D02,
                 dcPin: Device.Pins.D01,
                 resetPin: Device.Pins.D00,
-                width: 240, height: 240,
+                width: 128, height: 160,
                 displayType: St7735.DisplayType.ST7735R
             );
 
             graphics = new GraphicsLibrary(display);
 
             DisplayJPG();
-
             led.SetColor(RgbLed.Colors.Green);
         }
 
         void DisplayJPG()
         {
-            var jpgData = LoadResource("image1.jpg");
+            var jpgData = LoadResource("image2.jpeg");
             var decoder = new JpegDecoder();
             var jpg = decoder.DecodeJpeg(jpgData);
 
@@ -75,14 +73,15 @@ namespace meadowImageGallery
                     x = 0;
                 }
             }
-
+            
             display.Show();
         }
 
         byte[] LoadResource(string filename)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = $"GalleryViewer.{filename}";
+            var resourceName = $"meadowImageGallery.{filename}";
+        
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             {
