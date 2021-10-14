@@ -18,10 +18,6 @@ namespace meadowImageGallery
         RgbLed led;
         St7735 display;
         GraphicsLibrary graphics;
-        PushButton buttonUp;
-        PushButton buttonDown;
-        int selectedIndex;
-        string[] images = new string[3] {"image1.jpg", "image2.jpg", "image3.jpg"};
 
         public MeadowApp()
         {
@@ -43,11 +39,11 @@ namespace meadowImageGallery
                 chipSelectPin: Device.Pins.D02,
                 dcPin: Device.Pins.D01,
                 resetPin: Device.Pins.D00,
-                width: 240, height: 240
+                width: 240, height: 240,
+                displayType: St7735.DisplayType.ST7735R
             );
 
             graphics = new GraphicsLibrary(display);
-            graphics.Rotation = GraphicsLibrary.RotationType._270Degrees;
 
             DisplayJPG();
 
@@ -56,7 +52,7 @@ namespace meadowImageGallery
 
         void DisplayJPG()
         {
-            var jpgData = LoadResource(images[selectedIndex]);
+            var jpgData = LoadResource("image1.jpg");
             var decoder = new JpegDecoder();
             var jpg = decoder.DecodeJpeg(jpgData);
 
